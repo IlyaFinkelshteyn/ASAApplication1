@@ -1,0 +1,19 @@
+version: 1.0.{build}
+install:
+- ps: |
+    Write-Host "Downloading Azure Stream Analytics Tools for Visual Studio 2015..."
+    $msiPath = "$env:TEMP\Microsoft.Azure.StreamAnalyticsToolsForVS2015.msi"
+    (New-Object Net.WebClient).DownloadFile('https://download.microsoft.com/download/3/2/D/32D19D0C-772E-4B01-8590-7017B2AD739A/Microsoft.Azure.StreamAnalyticsToolsForVS2015.msi', $msiPath)
+    Write-Host "Installing Azure Stream Analytics Tools for Visual Studio 2015..."
+    cmd /c start /wait msiexec /i "$msiPath" /quiet
+    del $msiPath
+
+    Write-Host "Warming up Visual Studio 2015 with Azure Data Lake Tools..."
+    $job = Start-Job -ScriptBlock {cmd.exe /c 'C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe' C:\projects\asaapplication1\ASAApplication1.sln}
+    while (!(test-path "C:\Users\appveyor\AppData\Roaming\Microsoft\DataLake\MsBuild\1.0\StreamAnalytics.targets")) {[System.Console]::Write("."); sleep 3}
+    Stop-job $job
+
+build_script:
+  - ps: cmd.exe /c 'C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe' C:\projects\asaapplication1\ASAApplication1.sln /Build
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
