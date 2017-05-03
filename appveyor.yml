@@ -14,7 +14,7 @@ install:
     Stop-job $job
 
 init:
-  - rmdir /s /q %AppData$\Microsoft\DataLake
+  - rmdir /s /q %AppData%\Microsoft\DataLake
 
 #build_script:
 #  - cmd /c "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe" C:\projects\asaapplication1\ASAApplication1.sln /Build
