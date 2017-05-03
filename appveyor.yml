@@ -1,6 +1,6 @@
 version: 1.0.{build}
 install:
-- ps: |
+- ps: |   
     Write-Host "Downloading Azure Stream Analytics Tools for Visual Studio 2015..."
     $msiPath = "$env:TEMP\Microsoft.Azure.StreamAnalyticsToolsForVS2015.msi"
     (New-Object Net.WebClient).DownloadFile('https://download.microsoft.com/download/3/2/D/32D19D0C-772E-4B01-8590-7017B2AD739A/Microsoft.Azure.StreamAnalyticsToolsForVS2015.msi', $msiPath)
@@ -14,7 +14,7 @@ install:
     Stop-job $job
 
 before_build:
-  - nuget restore
+  - rmdir /s /q %AppData$\Microsoft\DataLake
 
 #build_script:
 #  - cmd /c "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe" C:\projects\asaapplication1\ASAApplication1.sln /Build
