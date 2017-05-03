@@ -13,7 +13,7 @@ install:
     while (!(test-path "C:\Users\appveyor\AppData\Roaming\Microsoft\DataLake\MsBuild\1.0\StreamAnalytics.targets")) {[System.Console]::Write("."); sleep 3}
     Stop-job $job
 
-before_build
+before_build:
   - nuget restore
 
 #build_script:
